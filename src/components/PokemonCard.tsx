@@ -1,26 +1,32 @@
 // src/components/PokemonCard.tsx
 import React from 'react';
-import type { PokemonWithJapaneseName } from '../api/pokemonWithJapaneseName';
+import { Link } from 'react-router-dom';
 
-interface PokemonCardProps {
-  pokemon: PokemonWithJapaneseName;
+export type PokemonDetail = {
+  name: string;
+  url: string;
+  japaneseName: string;
+  number: string;
 }
 
+type PokemonCardProps = {
+  pokemon: PokemonDetail;
+};
+
 const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
+  const id = pokemon.url.split('/').filter(Boolean).pop();
+  const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow">
-      <img
-        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.number}.png`}
-        alt={pokemon.japaneseName}
-        className="w-full h-32 object-contain"
-      />
-      <div className="mt-2">
-        <p className="text-sm text-gray-500">No.{pokemon.number}</p>
-        <p className="font-bold text-lg">{pokemon.japaneseName}</p>
-        <p className="text-xs text-gray-600">{pokemon.name}</p>
+    <Link to={`/pokemon/${id}`}>
+      <div className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center hover:shadow-xl transition-shadow">
+        <p className="text-sm text-gray-500 mr-auto">No. {pokemon.number}</p>
+        <img src={imageUrl} alt={pokemon.japaneseName} className="w-20 h-20" />
+        <h2 className="mt-2 text-lg font-semibold">{pokemon.japaneseName}</h2>
       </div>
-    </div>
+    </Link>
   );
 };
 
 export default PokemonCard;
+
